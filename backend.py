@@ -1,6 +1,6 @@
 import os
 from data import *
-from parser import *
+from parsers import *
 
 class UserData:
     def __init__(self, userName):
