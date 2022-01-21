@@ -9,7 +9,7 @@ class UserData:
 
 class Backend:
     def __init__(self):
-        self.parser = Parser("./randomData")
+        self.parser = Parser("./files/randomData")
         self.parser.safeOpen()
         self.dataList = self.parser.parse(self.parser.getDataFromFile(),",")
         self.data = Data(self.dataList)
