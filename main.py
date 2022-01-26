@@ -58,21 +58,19 @@ Screen:
                 id: user_data_scr
                 name: "scr data"
                 MDDropDownItem:
-                    id: drop_item
+                    id: dropItemCategory
                     pos_hint: {'center_x': .3, 'center_y': .46}
                     text: 'Item'
-                    on_release: app.menu.open()
+                    on_release: app.menuCategory.open()
                 MDRaisedButton:
                     text: "hola"
                     on_press:
                         app.showDatePicker()
-                MDTextField:
-                    id: Repeat
-                    hint_text: "Repeates to be removed"
-                    pos_hint: {"center_x": .6,"center_y": .46}
-                    multiline: False
-                    size_hint: .25, .04
-                    mode: "rectangle"
+                MDDropDownItem:
+                    id: dropItemRepeat
+                    pos_hint: {'center_x': .6, 'center_y': .46}
+                    text: 'hehe'
+                    on_release: app.menuRepeat.open()
                 MDTextField:
                     id: Time
                     hint_text: "Time"
@@ -144,6 +142,24 @@ class App(MDApp):
         self.calendarBtnColorUpdate()
     def init(self):
         self.addCalendar()
+        categories = ["Monthly", "Weekly", "Bi-Weekly"]
+        menu_items = [
+            {
+                "viewclass": "IconListItem",
+                "icon": "git",
+                "text": f"{i}",
+                "height": dp(56),
+                "on_release": lambda x=f"Item {i}": self.set_item(x),
+            } for i in categories
+        ]
+        print(menu_items[0]["text"])
+        self.menuRepeat = MDDropdownMenu(
+            caller=self.screen.ids.dropItemRepeat,
+            items=menu_items,
+            position="center",
+            width_mult=4,
+        )
+        self.menuRepeat.bind()
         categories = ["School", "Sports", "Extracurriculars"]
         menu_items = [
             {
@@ -155,13 +171,13 @@ class App(MDApp):
             } for i in categories
         ]
         print(menu_items[0]["text"])
-        self.menu = MDDropdownMenu(
-            caller=self.screen.ids.drop_item,
+        self.menuCategory = MDDropdownMenu(
+            caller=self.screen.ids.dropItemCategory,
             items=menu_items,
             position="center",
             width_mult=4,
         )
-        self.menu.bind()
+        self.menuCategory.bind()
         self.calenderArray = []
     def calendarBtnColorUpdate(self):
         counter = 0
