@@ -1,5 +1,6 @@
 import calendar
 from datetime import date
+from datetime import *
 from backend import *
 from parser import *
 from data import *
@@ -131,9 +132,10 @@ class App(MDApp):
         self.calenderArray = []
         self.days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}
         self.dataTypes = ["Category","Month", "Day", "RepeatMonth", "Time"]
-        firstDay = 1 + calendar.monthrange(2022,1)[0]
+        firstDay = 1 + calendar.monthrange(2022,helper.getMonth())[0]
+        print(firstDay)
         a = 0
-        for i in range (1,calendar.monthrange(2022,1)[1]+ 1 + firstDay):            
+        for i in range(1,calendar.monthrange(2022,helper.getMonth())[1]+1 + firstDay):            
             button = MDRaisedButton()
             if(i > firstDay):
                 a += 1
@@ -141,6 +143,7 @@ class App(MDApp):
                 button.text = str(a)
                 button
                 self.calenderArray.append(button)
+                print(a)
             else:
                 button.md_bg_color=[1,1,1,1]
                 button.elevation = 0
@@ -176,7 +179,7 @@ class App(MDApp):
         ]
         self.menuCategory = MDDropdownMenu(
             caller=self.screen.ids.dropItemCategory,
-            items=menu_items,
+             items=menu_items,
             position="center",
             width_mult=4,
         )
@@ -234,11 +237,12 @@ class helper:
         return (.25 * (input ** .5))
     @staticmethod
     def getMonth():
-        return datetime.datetime.now().month
+        return datetime.now().month
     @staticmethod
     def getDayArray():
         lol = calendar.Calendar()
         array = []
-        for i in range(1,calendar.monthrange(2022,getMonth())[1]+1):
-            print(calendar.weekday(2022,getMonth(),i))
+        for i in range(1,calendar.monthrange(2022,helper.getMonth())[1]+1):
+            print(calendar.weekday(2022,helper.getMonth(),i))
+helper.getDayArray();
 App().run()
