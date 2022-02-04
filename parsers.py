@@ -49,9 +49,13 @@ class Parser:
         return out
 
     def addData(self, str):
-        self.File.seek(0,2)
+        self.File.close()
+        self.File = open(self.path, "a")
+        #self.File.seek(0,2)
         #self.File.write("\n")
         self.File.write(str)
+        self.File.close()
+        self.safeOpen()
     
     def close(self):
         self.File.close()

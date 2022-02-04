@@ -30,7 +30,7 @@ KV = '''
                 on_press:
                     root.nav_drawer.set_state("close")
                     root.screen_manager.current = "scr 1"
-                    app.calenderBtnColorUpdate()
+                    app.calendarBtnColorUpdate()
             OneLineListItem:
                 text: "Calender"
                 on_press:
@@ -62,6 +62,11 @@ Screen:
                     pos_hint: {'center_x': .3, 'center_y': .46}
                     text: 'Item'
                     on_release: app.menuCategory.open()
+                MDRaisedButton:
+                    text: "hola soy yo"
+                    pos_hint: {'center_x': .3, 'center_y': .6}
+                    on_press:
+                        app.userPush()
                 MDRaisedButton:
                     text: "hola"
                     on_press:
@@ -108,16 +113,17 @@ class ContentNavigationDrawer(BoxLayout):
 class App(MDApp):
     def build(self):
         self.userDataTemp = {
-                "Day" : 0,
                 "Category": 0,
-                "RepeatType": 0,
                 "Month": 0,
+                "Day" : 0,
+                "RepeatType": 0,
                 "Time": 0
                 }
         self.screen = Builder.load_string(KV)
         self.screen.ids.screen_manager.current = "scr 2"
         self.screen.ids.screen_manager.current = "scr 1"
         self.backend = Backend()
+        self.parser = self.backend.getParser()
         self.data = self.backend.getData()
         self.init()
         return self.screen
@@ -142,24 +148,22 @@ class App(MDApp):
         self.calendarBtnColorUpdate()
     def init(self):
         self.addCalendar()
-        categories = ["Monthly", "Weekly", "Bi-Weekly"]
+        categories = ["Monthly", "Weekly", "Bi-Weekly", "Do Not Reapeat"]
         menu_items = [
             {
                 "viewclass": "IconListItem",
                 "icon": "git",
                 "text": f"{i}",
                 "height": dp(56),
-                "on_release": lambda x=f"Item {i}": self.set_item(x),
+                "on_release": lambda x=f"{i}": self.set_itemRepeat(x),
             } for i in categories
         ]
-        print(menu_items[0]["text"])
         self.menuRepeat = MDDropdownMenu(
             caller=self.screen.ids.dropItemRepeat,
             items=menu_items,
             position="center",
             width_mult=4,
         )
-        self.menuRepeat.bind()
         categories = ["School", "Sports", "Extracurriculars"]
         menu_items = [
             {
@@ -167,16 +171,16 @@ class App(MDApp):
                 "icon": "git",
                 "text": f"{i}",
                 "height": dp(56),
-                "on_release": lambda x=f"Item {i}": self.set_item(x),
+                "on_release": lambda x=f"{i}": self.set_itemCategory(x),
             } for i in categories
         ]
-        print(menu_items[0]["text"])
         self.menuCategory = MDDropdownMenu(
             caller=self.screen.ids.dropItemCategory,
             items=menu_items,
             position="center",
             width_mult=4,
         )
+        self.menuRepeat.bind()
         self.menuCategory.bind()
         self.calenderArray = []
     def calendarBtnColorUpdate(self):
@@ -201,12 +205,19 @@ class App(MDApp):
         date_dialog.bind(on_save=self.on_save, on_cancel=self.on_cancel)
         date_dialog.open()
     def pullDataTime(self):
-        print(self.screen.ids.Time.text)
-    def set_item(self, text_item):
-        self.screen.ids.drop_item.set_item(text_item)
-        self.menu.dismiss()
+        self.userDataTemp["Time"] = (self.screen.ids.Time.text)
+    def set_itemRepeat(self, text_item):
+        self.screen.ids.dropItemRepeat.set_item(text_item)
+        self.menuRepeat.dismiss()
+        self.userDataTemp["RepeatType"] = text_item
+        print(self.userDataTemp)
+    def set_itemCategory(self, text_item):
+        self.screen.ids.dropItemCategory.set_item(text_item)
+        self.menuCategory.dismiss()
         self.userDataTemp["Category"] = text_item
         print(self.userDataTemp)
+    def userPush(self):
+        self.parser.addData(self.data.convertData(self.userDataTemp))
 class helper:
     @staticmethod
     def max(array):
@@ -228,6 +239,6 @@ class helper:
     def getDayArray():
         lol = calendar.Calendar()
         array = []
-        for i in range(1,calendar.monthrange(2022,1)[1]+1):
-            print(calendar.weekday(2022,1,i))
+        for i in range(1,calendar.monthrange(2022,getMonth())[1]+1):
+            print(calendar.weekday(2022,getMonth(),i))
 App().run()

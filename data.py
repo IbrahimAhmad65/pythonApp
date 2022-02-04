@@ -41,6 +41,14 @@ class Data:
             out.append(temp)
         return out
 
+    def convertData(self, dict):
+        out = ""
+        for i in dict:
+            print(dict[i])
+            out = out + str(dict[i]) + ", "
+        print(out)
+        return out
+
     def getDataFiltered(self, filter, filterType, dataType):
 #        print("Filter ", filter)
         array = []
