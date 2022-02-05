@@ -27,7 +27,6 @@ class Backend:
     def getParser(self):
         return self.parser;
 
-    def tick(self,str):
-        self.pushData(str)
+    def tick(self):
         self.pullData()
         return self.getData()

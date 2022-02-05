@@ -54,6 +54,8 @@ class Parser:
         #self.File.seek(0,2)
         #self.File.write("\n")
         self.File.write(str)
+        self.File.write("\n")
+        self.File.write(str)
         self.File.close()
         self.safeOpen()
     

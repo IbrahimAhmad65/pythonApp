@@ -19,7 +19,6 @@ from kivymd.uix.list import OneLineIconListItem
 calendar.setfirstweekday(calendar.SUNDAY)
 KV = '''
 <IconListItem>
-
     IconLeftWidget:
         icon: root.icon
 <ContentNavigationDrawer>:
@@ -208,7 +207,10 @@ class App(MDApp):
         date_dialog.bind(on_save=self.on_save, on_cancel=self.on_cancel)
         date_dialog.open()
     def pullDataTime(self):
-        self.userDataTemp["Time"] = (self.screen.ids.Time.text)
+        if(self.screen.ids.Time.text[0] != 0):
+            self.userDataTemp["Time"] = (self.screen.ids.Time.text)
+        else:
+            self.userDataTemp["Time"] = self.screen.ids.Time.text.replace('0','')
     def set_itemRepeat(self, text_item):
         self.screen.ids.dropItemRepeat.set_item(text_item)
         self.menuRepeat.dismiss()
@@ -220,7 +222,9 @@ class App(MDApp):
         self.userDataTemp["Category"] = text_item
         print(self.userDataTemp)
     def userPush(self):
-        self.parser.addData(self.data.convertData(self.userDataTemp))
+        if(self.userDataTemp["Category"] != 0 and self.userDataTemp["Time"] != 0 and self.userDataTemp["Day"] != 0):
+            self.parser.addData(self.data.convertData(self.userDataTemp))
+        self.calendarBtnColorUpdate()
 class helper:
     @staticmethod
     def max(array):

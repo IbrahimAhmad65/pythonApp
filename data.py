@@ -43,10 +43,13 @@ class Data:
 
     def convertData(self, dict):
         out = ""
+        counter = 0
         for i in dict:
+            counter += 1
             print(dict[i])
-            out = out + str(dict[i]) + ", "
-        print(out)
+            out = out + str(dict[i])
+            if(counter != 5):
+                out = out + " ,"
         return out
 
     def getDataFiltered(self, filter, filterType, dataType):
